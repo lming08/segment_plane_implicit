@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E0AFE738-0AB8-4880-AF52-2B1DA647F9D5}</ProjectGuid>
+    <RootNamespace>segment_plane</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <IncludePath>C:\Program Files %28x86%29\VTK 5.8.0\include\vtk-5.8;C:\Program Files %28x86%29\flann\include;C:\Program Files %28x86%29\Eigen\include;C:\Program Files %28x86%29\Boost\include;C:\Program Files %28x86%29\PCL\include\pcl-1.6;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\flann\lib;C:\Program Files %28x86%29\Boost\lib;C:\Program Files %28x86%29\PCL\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;4819</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_BASE_VERTICLE_GROUND;_RAND;_CUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
+      <AdditionalOptions>-Zm249 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libboost_system-vc100-mt-gd-1_50.lib;libboost_filesystem-vc100-mt-gd-1_50.lib;libboost_thread-vc100-mt-gd-1_50.lib;libboost_date_time-vc100-mt-gd-1_50.lib;libboost_iostreams-vc100-mt-gd-1_50.lib;pcl_common_debug.lib;pcl_octree_debug.lib;C:\Program Files (x86)\OpenNI\Lib\openNI.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkCommon-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkRendering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkHybrid-gd.lib;pcl_io_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\FLANN\lib\flann_cpp_s-gd.lib;pcl_kdtree_debug.lib;pcl_search_debug.lib;pcl_sample_consensus_debug.lib;pcl_filters_debug.lib;pcl_segmentation_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_visualization_debug.lib;pcl_features_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\Qhull\lib\qhullstatic_d.lib;pcl_surface_debug.lib;pcl_registration_debug.lib;pcl_keypoints_debug.lib;pcl_tracking_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_apps_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkGraphics-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkverdict-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkImaging-gd.lib;C:\Qt\4.8.0\lib\QtGuid4.lib;C:\Qt\4.8.0\lib\QtSqld4.lib;C:\Qt\4.8.0\lib\QtCored4.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkIO-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkFiltering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkDICOMParser-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF_cxx-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkmetaio-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksys-gd.lib;ws2_32.lib;comctl32.lib;wsock32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksqlite-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkpng-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtktiff-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkzlib-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkjpeg-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexpat-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkftgl-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkfreetype-gd.lib;opengl32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexoIIc-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF-gd.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\cluster_extraction.cpp" />
+    <ClCompile Include="..\src\gaussfilter.cpp" />
+    <ClCompile Include="..\src\meanshift.cpp" />
+    <ClCompile Include="..\src\precompile.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\src\process.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\common.h" />
+    <ClInclude Include="..\include\gaussfilter.h" />
+    <ClInclude Include="..\include\meanshift.h" />
+    <ClInclude Include="..\include\other.hpp" />
+    <ClInclude Include="..\include\process.h" />
+    <ClInclude Include="..\include\typesdef.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
