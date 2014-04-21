@@ -175,8 +175,8 @@ bool segment_plane(const pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud,
 	seg.setOptimizeCoefficients (true);
 	seg.setModelType (pcl::SACMODEL_PLANE);
 	seg.setMethodType (pcl::SAC_RANSAC);
-	seg.setMaxIterations (100);
-	seg.setDistanceThreshold (0.06);
+	seg.setMaxIterations (MAX_ITERS);
+	seg.setDistanceThreshold (SEG_DIST_THRESHOLD);
 
 	*p_pointcloud = *pointcloud;
 	int i=0, nr_points = (int) p_pointcloud->points.size ();

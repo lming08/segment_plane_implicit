@@ -14,8 +14,8 @@ const float PLN2PLN_THRESHOLD = 1.4;//;1.8;//1.0;  //!两近似平行平面间的距离小于
 const float CENTER2CENTER_THRESHOLD = 6.0;  //!两近似平行平面的重心间的距离小于CENTER2CENTER_THRESHOLD， 就将两平面融合
 const float PNT2PLANE_THRESHOLD = 1.8;  //!点到平面间的阈值，若距离小于该阈值则将该点看作是平面的一部分
 
-const float SEG_DIST_THRESHOLD = 0.15;//0.15; //0.06; //!分割平面时的距离阈值
-const int MAX_ITERS = 220;//100;//220;  //!平面分割时随机采样一致性算法中的迭代次数
+const float SEG_DIST_THRESHOLD = 0.06;//0.15; //0.06; //!分割平面时的距离阈值
+const int MAX_ITERS = 100;//100;//220;  //!平面分割时随机采样一致性算法中的迭代次数
 
 /*
  *	定义一个平面系数结构体，平面方程一般可以表示为ax+by+cz+d = 0
