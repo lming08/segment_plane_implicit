@@ -118,7 +118,7 @@ int main (int argc, char** argv)
 			winmodel.setKNNRadius(1.0f);
 			winmodel.checkAllPointsIsBoundary();
 			winmodel.computeWinWidthAndMarginDist(wmparams.width, wmparams.margin_lr_dist, wmparams.horizon_wins_dist);
-			winmodel.computeWinWidthAndMarginDist(wmparams.height, wmparams.margin_ud_dist, wmparams.vertical_wins_dist);
+			winmodel.computeWinHeightAndMarginDist(wmparams.height, wmparams.margin_ud_dist, wmparams.vertical_wins_dist);
 
 			v_wmparams[i] = wmparams;
 		}
