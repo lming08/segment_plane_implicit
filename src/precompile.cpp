@@ -1,9 +1,3 @@
-// ¸ÃÎÄ¼ş½ö½öÓÃÓÚ´´½¨Ô¤±àÒëÍ· [4/17/2014 pc]
+ï»¿// è¯¥æ–‡ä»¶ä»…ä»…ç”¨äºåˆ›å»ºé¢„ç¼–è¯‘å¤´ [4/17/2014 pc]
 #include "common.h"
 #include "typesdef.h"
-
-//Ë³±ã°ÑÕâ¸öº¯Êı¸ø¶¨ÒåÁË£¬Èç¹ûÔÚÍ·ÎÄ¼ştypesdef.hÖĞÇÒ¶à¸öÔ´ÎÄ¼ş°üº¬typesdef.h»á±¨º¯ÊıÖØ¶¨Òå´íÎó
-Vector makeVector(const _Point & pnt1, const _Point & pnt2)
-{
-	return Vector(pnt1.x - pnt2.x, pnt1.y - pnt2.y, pnt1.z - pnt2.z);
-}

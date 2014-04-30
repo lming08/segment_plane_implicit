@@ -2,6 +2,7 @@
 #include "other.hpp"
 #include "process.h"
 #include "typesdef.h"
+#include "common_operate.h"
 #include <assert.h>
 #include <Eigen/Dense>
 
@@ -738,7 +739,7 @@ bool traverse_merge_planes(std::vector<VecPointCloudPlane> & v_vec_pntcldpln, Ve
    * \param[in]  pnt2
    * \param[out]  vec 得到的方向向量
    */
-static bool get_parallel_ground_vector(const Point &pnt0, const Point &pnt1, const Point &pnt2, Vector &vec)
+inline bool get_parallel_ground_vector(const Point &pnt0, const Point &pnt1, const Point &pnt2, Vector &vec)
 {
 	if (pnt0 == pnt1 || pnt0 == pnt2 || pnt1 == pnt2)
 	{
@@ -770,7 +771,7 @@ static bool get_parallel_ground_vector(const Point &pnt0, const Point &pnt1, con
    * \param[in]  plncoeff 平面方程系数
    * \param[out]  vec 得到的方向向量
    */
-inline static bool get_parallel_ground_vector(const PlaneCoeff & plncoeff, Vector &vec)
+inline bool get_parallel_ground_vector(const PlaneCoeff & plncoeff, Vector &vec)
 {
 	//平行于地面的方向向量是(m, n, 0)
 	float m = plncoeff.b;
@@ -1358,17 +1359,17 @@ static bool get_rect_edge_cut(const PointCloud<PointXYZ>::Ptr pntcld_original, c
 			bool select_pnt1 = false, select_pnt2 = false, select_intersect = false;
 			do 
 			{
-				if (makeVector(pnt1, bound1).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(pnt1, bound1).normalize().isVertical(vec_horizon))
 				{
 					select_pnt1 = true;
 					break;
 				}
-				if (makeVector(pnt2, bound1).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(pnt2, bound1).normalize().isVertical(vec_horizon))
 				{
 					select_pnt2 = true;
 					break;
 				}
-				if (makeVector(intersected_pnt, bound1).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(intersected_pnt, bound1).normalize().isVertical(vec_horizon))
 				{
 					select_intersect = true;
 					break;
@@ -1377,17 +1378,17 @@ static bool get_rect_edge_cut(const PointCloud<PointXYZ>::Ptr pntcld_original, c
 
 			do 
 			{
-				if (makeVector(pnt1, bound2).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(pnt1, bound2).normalize().isVertical(vec_horizon))
 				{
 					select_pnt1 = true;
 					break;
 				}
-				if (makeVector(pnt2, bound2).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(pnt2, bound2).normalize().isVertical(vec_horizon))
 				{
 					select_pnt2 = true;
 					break;
 				}
-				if (makeVector(intersected_pnt, bound2).normalize().isVertical(vec_horizon))
+				if (comm_oper::makeVector(intersected_pnt, bound2).normalize().isVertical(vec_horizon))
 				{
 					select_intersect = true;
 					break;

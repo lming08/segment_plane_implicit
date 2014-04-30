@@ -18,7 +18,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -72,20 +72,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster_extraction.cpp" />
+    <ClCompile Include="..\src\common_operate.cpp" />
     <ClCompile Include="..\src\gaussfilter.cpp" />
     <ClCompile Include="..\src\meanshift.cpp" />
     <ClCompile Include="..\src\precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\process.cpp" />
+    <ClCompile Include="..\src\window_model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\common.h" />
+    <ClInclude Include="..\include\common_operate.h" />
     <ClInclude Include="..\include\gaussfilter.h" />
     <ClInclude Include="..\include\meanshift.h" />
     <ClInclude Include="..\include\other.hpp" />
     <ClInclude Include="..\include\process.h" />
     <ClInclude Include="..\include\typesdef.h" />
+    <ClInclude Include="..\include\window_model.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

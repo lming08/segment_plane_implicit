@@ -30,6 +30,12 @@
     <ClCompile Include="..\src\precompile.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\window_model.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common_operate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\typesdef.h">
@@ -48,6 +54,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\process.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\window_model.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\common_operate.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
