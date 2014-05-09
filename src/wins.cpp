@@ -9,7 +9,7 @@
 extern string g_work_dir_path;
 bool determin_plane_verticles(/*const*/ PointCloudPlane & pntcldpln, Rect &rect);
 
-void Wins::computeWins(VecRect &v_rect)
+void Wins::computeWins(VecRect &v_rect, bool is_savefile)
 {
 	PointCloudBoundary boundaries;
 	PointCloudPtr cld_bnd(new pcl::PointCloud<pcl::PointXYZ>);
@@ -17,7 +17,7 @@ void Wins::computeWins(VecRect &v_rect)
 
 	checkAllPointsIsBoundary(boundaries);	
 	getBoundaryPoints(boundaries, cld_bnd);
-	clusterPoints(cld_bnd, vv_pnt);
+	clusterPoints(cld_bnd, vv_pnt, is_savefile);
 
 	size_t win_count = vv_pnt.size();
 	VecPointCloudPlane v_pntcldpln;
@@ -86,7 +86,7 @@ void Wins::getBoundaryPoints(const PointCloudBoundary &boundaries, PointCloudPtr
 	pntcld->height = 1;
 }
 
-void Wins::clusterPoints(const PointCloudPtr pntcld, VecVecPoint &vv_pnt)
+void Wins::clusterPoints(const PointCloudPtr pntcld, VecVecPoint &vv_pnt,  bool is_savefile)
 {
 	// Creating the KdTree object for the search method of the extraction
 	pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
@@ -122,16 +122,18 @@ void Wins::clusterPoints(const PointCloudPtr pntcld, VecVecPoint &vv_pnt)
 		cloud_cluster->width = cloud_cluster->points.size ();
 		cloud_cluster->height = 1;
 		cloud_cluster->is_dense = true;
+		if (is_savefile)
+		{
+			std::cout << "PointCloud representing the Cluster: " << cloud_cluster->points.size () << " data points." << std::endl;
+			std::stringstream ss;
+			ss << "wins_" << j << ".pcd";
 
-		std::cout << "PointCloud representing the Cluster: " << cloud_cluster->points.size () << " data points." << std::endl;
-		std::stringstream ss;
-		ss << "wins_" << j << ".pcd";
+			string str = g_work_dir_path;
+			str += "/";
+			str += string(ss.str());
+			pcl::io::savePCDFileASCII(str, *cloud_cluster);
 
-		string str = g_work_dir_path;
-		str += "/";
-		str += string(ss.str());
-		pcl::io::savePCDFileASCII(str, *cloud_cluster);
-
-		j++;
+			j++;
+		}
 	}
 }

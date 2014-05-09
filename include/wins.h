@@ -35,7 +35,7 @@ public:
 		m_plane = plncoeff;
 	}
 
-	void computeWins(VecRect &v_rect);
+	void computeWins(VecRect &v_rect, bool is_savefile);
 
 private:
 	/*检查所有点是否是边界点*/
@@ -48,7 +48,7 @@ private:
 	void getBoundaryPoints(const PointCloudBoundary &boundaries, PointCloudPtr pntcld);
 
 	/*将点聚类，使得一个窗户成一类*/
-	void clusterPoints(const PointCloudPtr pntcld, VecVecPoint &vv_pnt);
+	void clusterPoints(const PointCloudPtr pntcld, VecVecPoint &vv_pnt, bool is_savefile);
 
 private:
 	PointCloudPtr m_input;

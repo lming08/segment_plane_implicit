@@ -175,12 +175,12 @@ int main (int argc, char* argv[])
 
 			pointcloudplane2pointcloud(v_merged_pntcldplane[i], cld);
 
-			//对各个墙面建模
+			//对各个窗户建模
 			Wins win;
 			win.setInputCloud(cld);
 			win.setInputPlane(v_merged_pntcldplane[i].m_coeff);
 			win.setKNNRadius(WIN_BNDARY_KNN_RADIUS);
-			win.computeWins(vv_wins_rect[i]);
+			win.computeWins(vv_wins_rect[i], false);
 		}
 
 		PointCloud<PointXYZ>::Ptr cld_contour_rebuilded(new PointCloud<PointXYZ>());
