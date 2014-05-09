@@ -8,6 +8,8 @@
 #include "window_model.h"
 
 const float WindowModel::Z_DELTA = 0.3f;
+const float WindowModel::XY_DELTA = 0.1f;
+//const float WindowModel::NEAREST_ZERO = 0.3;
 const float WindowModel::SIGMA = 0.14f;
 
 extern inline bool get_parallel_ground_vector(const PlaneCoeff & plncoeff, Vector &vec);
@@ -84,9 +86,9 @@ void WindowModel::getBilateralIndices(size_t & indice1, size_t & indice2)
 	}  // for (size_t i = 0; i < pntcld_count; ++i)
 }
 
-void WindowModel::computeWinWidthAndMarginDist(float &width, float &margin_lr_dist, float &horizon_wins_dist)
+void WindowModel::computeWinWidthAndMarginDist(const PointCloudBoundary &boundaries, float &width, float &margin_lr_dist, float &horizon_wins_dist)
 {
-	if ( m_boundaries.points.empty())
+	if ( boundaries.points.empty())
 	{
 		PCL_ERROR("checkAllPointsIsBoundary() must be called!\n");
 		throw "checkAllPointsIsBoundary() must be called";
@@ -124,7 +126,7 @@ void WindowModel::computeWinWidthAndMarginDist(float &width, float &margin_lr_di
 			pnt2line_dist = getPntToLineDist(pnt, pntinline, vec_horizon);
 			if (pnt2line_dist <= WIN_PNT2LINE_DIST_THRSHLD)
 			{
-				if (m_boundaries.points[i].boundary_point)
+				if (boundaries.points[i].boundary_point)
 				{
 					pointcloud.points.push_back(pnt);
 				}				
@@ -163,12 +165,12 @@ void WindowModel::computeWinWidthAndMarginDist(float &width, float &margin_lr_di
 			} 
 			else
 			{
-				if (dist < WIN_PNT2PNT_DIST_MIN)
+				if (dist < WIN_PNT2PNT_WIDTH_DIST_MIN)
 				{
 					//扫描线刚好与窗户的某个边重合
 					break; 
 				}
-				else if (dist > WIN_PNT2PNT_DIST_MAX)
+				else if (dist > WIN_PNT2PNT_WIDTH_DIST_MAX)
 				{
 					//中间有一块数据采集不够完整
 					continue;
@@ -197,9 +199,9 @@ void WindowModel::computeWinWidthAndMarginDist(float &width, float &margin_lr_di
 	horizon_wins_dist = wins_dist;
 }
 
-void WindowModel::computeWinHeightAndMarginDist(float &height, float &margin_ud_dist, float &vertical_wins_dist)
+void WindowModel::computeWinHeightAndMarginDist(const PointCloudBoundary &boundaries, float &height, float &margin_ud_dist, float &vertical_wins_dist)
 {
-	if ( m_boundaries.points.empty())
+	if ( boundaries.points.empty())
 	{
 		PCL_ERROR("checkAllPointsIsBoundary() must be called!\n");
 		throw "checkAllPointsIsBoundary() must be called";
@@ -219,7 +221,7 @@ void WindowModel::computeWinHeightAndMarginDist(float &height, float &margin_ud_
 	PointXYZ &bilateral_pnt2 = m_input->points[bilateral_indice2];
 	Eigen::Vector3f vec(bilateral_pnt1.x - bilateral_pnt2.x, bilateral_pnt1.y - bilateral_pnt2.y, bilateral_pnt1.z - bilateral_pnt2.z);
 	float wall_width = vec.dot(vec_horizon);  //!这里的vec_horizon为单位向量
-	size_t iters = (size_t)(fabsf(wall_width) / WindowModel::Z_DELTA);
+	size_t iters = (size_t)(fabsf(wall_width) / WindowModel::XY_DELTA);
 
 	PointXYZ pntinline = (wall_width > 0 ? bilateral_pnt2 : bilateral_pnt1);
 
@@ -236,7 +238,7 @@ void WindowModel::computeWinHeightAndMarginDist(float &height, float &margin_ud_
 			pnt2line_dist = getPntToLineDist(pnt, pntinline, vec_vertical);
 			if (pnt2line_dist <= WIN_PNT2LINE_DIST_THRSHLD)
 			{
-				if (m_boundaries.points[i].boundary_point)
+				if (boundaries.points[i].boundary_point)
 				{
 					pointcloud.points.push_back(pnt);
 				}				
@@ -246,9 +248,9 @@ void WindowModel::computeWinHeightAndMarginDist(float &height, float &margin_ud_
 		{
 			v_lines.push_back(pointcloud);
 		}
-		pntinline.x += vec_horizon[0] * WindowModel::Z_DELTA;
-		pntinline.y += vec_horizon[1] * WindowModel::Z_DELTA;
-		pntinline.z += vec_horizon[2] * WindowModel::Z_DELTA;
+		pntinline.x += vec_horizon[0] * WindowModel::XY_DELTA;
+		pntinline.y += vec_horizon[1] * WindowModel::XY_DELTA;
+		pntinline.z += vec_horizon[2] * WindowModel::XY_DELTA;
 	}
 
 	//对扫描结果进行处理
@@ -275,12 +277,12 @@ void WindowModel::computeWinHeightAndMarginDist(float &height, float &margin_ud_
 			} 
 			else
 			{
-				if (dist < WIN_PNT2PNT_DIST_MIN)
+				if (dist < WIN_PNT2PNT_HEIGHT_DIST_MIN)
 				{
 					//扫描线刚好与窗户的某个边重合
 					break; 
 				}
-				else if (dist > WIN_PNT2PNT_DIST_MAX)
+				else if (dist > WIN_PNT2PNT_HEIGHT_DIST_MAX)
 				{
 					//中间有一块数据采集不够完整
 					continue;
@@ -340,8 +342,14 @@ inline float WindowModel::getPntToLineDist(const PointXYZ &pnt, const PointXYZ &
 	return dist;
 }
 
-void WindowModel::checkAllPointsIsBoundary()
+void WindowModel::checkAllPointsIsBoundary(PointCloudBoundary &boundaries)
 {
+	if ( 0 == m_knn_radius)
+	{
+		PCL_ERROR("setKNNRadius() must be called!\n");
+		throw "setKNNRadius() must be called";
+	}
+
 	size_t pntcld_count = m_input->points.size();
 	pcl::BoundaryEstimation<pcl::PointXYZ, pcl::Normal, pcl::Boundary> boundEst; 
 	pcl::PointCloud<pcl::Normal>::Ptr normals(new pcl::PointCloud<pcl::Normal>); 
@@ -357,5 +365,5 @@ void WindowModel::checkAllPointsIsBoundary()
 	boundEst.setRadiusSearch(m_knn_radius); 
 	boundEst.setAngleThreshold(M_PI/2); 
 	boundEst.setSearchMethod(pcl::search::KdTree<pcl::PointXYZ>::Ptr (new pcl::search::KdTree<pcl::PointXYZ>)); 
-	boundEst.compute(m_boundaries); 
+	boundEst.compute(boundaries); 
 }

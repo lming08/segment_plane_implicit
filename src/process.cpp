@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <Eigen/Dense>
 
-extern string g_str;
+extern string g_work_dir_path;
 
  /** \brief 计算点云的法向量
    * \param[in] pCloud 带XYZ坐标的点云
@@ -222,7 +222,7 @@ bool segment_plane(const pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud,
 				ss << "cloud_seg_plane_" << index << ".pcd";
 				index++;
 
-				string str = g_str;
+				string str = g_work_dir_path;
 				str += "/";
 				str += string(ss.str());
 
@@ -303,7 +303,7 @@ bool segment_plane(const pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud,
 				ss << "cloud_seg_plane_"<<pln_index<<"_" << index << ".pcd";
 				index++;
 
-				string str = g_str;
+				string str = g_work_dir_path;
 				str += "/";
 				str += string(ss.str());
 
@@ -1530,12 +1530,12 @@ bool traverse_determin_planes_verticles(const PointCloud<PointXYZ>::Ptr pntcld_o
    * \param[in]  rect 输入的Rect，包括矩形的4个顶点
    * \param[out]  cld 得到的点云PointCloud
    */
-bool determin_plane_from_rect(Rect & rect, PointCloud<PointXYZ>::Ptr cld)
+bool determin_plane_from_rect(const Rect & rect, PointCloud<PointXYZ>::Ptr cld)
 {
-	Point &verticle1 = rect.m_verticle1;
-	Point &verticle2 = rect.m_verticle2;
-	Point &verticle3 = rect.m_verticle3;
-	Point &verticle4 = rect.m_verticle4;
+	const Point &verticle1 = rect.m_verticle1;
+	const Point &verticle2 = rect.m_verticle2;
+	const Point &verticle3 = rect.m_verticle3;
+	const Point &verticle4 = rect.m_verticle4;
 
 	//注意rect里面的4个点不一定呈标准矩形，但一定是一个上下两边平行的四边形
 	Vector vec12(verticle2.x - verticle1.x, verticle2.y - verticle1.y, verticle2.z - verticle1.z);
@@ -1630,16 +1630,193 @@ COMPLETE_FILL:
 	return true;
 }
 
- /** \brief  从矩形4个顶点确定一个点云平面，只画出轮廓
+static float get_pnt2line_dist(const Point &pntinline1, const Point &pntinline2, const Point &pnt)
+{
+	Eigen::Vector3f vec12(pntinline2.x - pntinline1.x, pntinline2.y - pntinline1.y, pntinline2.z - pntinline1.z);
+	Eigen::Vector3f vec1p(pnt.x - pntinline1.x, pnt.y - pntinline1.y, pnt.z - pntinline1.z);
+	float dot_prod = vec1p.dot(vec12);
+
+	return sqrtf( vec1p.dot(vec1p) - (dot_prod * dot_prod) / (vec12.dot(vec12)) );
+}
+
+ /** \brief  判断点是否在窗户中
+   * \param[in]  rect 包含窗户的矩形平面
+   * \param[in]  wmparams 窗户模型参数
+   * \param[in]  pnt 指定的点
+   */
+static bool is_pnt_in_win(const Rect & rect, const WindowModelParams &wmparams, const Point &pnt)
+{
+	float width = wmparams.width;  //!窗户的宽度
+	float margin_lr_dist = wmparams.margin_lr_dist;  //!窗户在左右方向上离墙面边缘的距离
+	float horizon_wins_dist = wmparams.horizon_wins_dist;  //!水平方向上，窗户间的距离
+
+	float height = wmparams.height;  //!窗户的高度
+	float margin_ud_dist = wmparams.margin_ud_dist;  //!窗户在上下方向上离墙面边缘的距离
+	float vertical_wins_dist = wmparams.vertical_wins_dist;  //!垂直方向上，窗户间的距离
+
+	const Point &vertex1 = rect.m_verticle1;
+	const Point &vertex2 = rect.m_verticle2;
+	const Point &vertex4 = rect.m_verticle4;
+
+	float pnt_line12_dist = get_pnt2line_dist(vertex1, vertex2, pnt);
+	float pnt_line14_dist = get_pnt2line_dist(vertex1, vertex4, pnt);
+
+	int n_calculated = 0;
+	
+	bool is_in_win_lr = false;  //!左右方向上，是否在窗户中
+	if (pnt_line14_dist > margin_lr_dist)
+	{
+		n_calculated = (int)( (pnt_line14_dist - margin_lr_dist) / (width + horizon_wins_dist) );
+		if (pnt_line14_dist < (margin_lr_dist + width + n_calculated * (width + horizon_wins_dist)))
+		{
+			is_in_win_lr = true;
+		}
+	}
+
+	bool is_in_win_ud = false;  //!上下方向上，是否在窗户中
+	if (pnt_line12_dist > margin_ud_dist)
+	{
+		n_calculated = (int)( (pnt_line12_dist - margin_ud_dist) / (height + vertical_wins_dist) );
+		if (pnt_line12_dist < (margin_ud_dist + height + n_calculated * (height + vertical_wins_dist)))
+		{
+			is_in_win_ud = true;
+		}
+	}
+
+
+	if (is_in_win_lr && is_in_win_ud)
+	{
+		return true;
+	} 
+	else
+	{
+		return false;
+	}
+}
+
+ /** \brief  从矩形4个顶点以及窗户模型参数确定一个点云平面
    * \param[in]  rect 输入的Rect，包括矩形的4个顶点
+   * \param[in]  wmparams 输入的窗户模型参数，包括相邻窗户间的距离、边缘窗户与边缘间的距离
    * \param[out]  cld 得到的点云PointCloud
    */
-bool determin_plane_from_rect_only_contour(Rect & rect, PointCloud<PointXYZ>::Ptr cld)
+bool determin_plane_from_rect_winmodel(const Rect & rect, const WindowModelParams &wmparams, PointCloud<PointXYZ>::Ptr cld)
 {
-	Point &verticle1 = rect.m_verticle1;
-	Point &verticle2 = rect.m_verticle2;
-	Point &verticle3 = rect.m_verticle3;
-	Point &verticle4 = rect.m_verticle4;
+	const Point &verticle1 = rect.m_verticle1;
+	const Point &verticle2 = rect.m_verticle2;
+	const Point &verticle3 = rect.m_verticle3;
+	const Point &verticle4 = rect.m_verticle4;
+
+	//注意rect里面的4个点不一定呈标准矩形，但一定是一个上下两边平行的四边形
+	Vector vec12(verticle2.x - verticle1.x, verticle2.y - verticle1.y, verticle2.z - verticle1.z);
+	Vector vec14(verticle4.x - verticle1.x, verticle4.y - verticle1.y, verticle4.z - verticle1.z);
+	Vector vec23(verticle3.x - verticle2.x, verticle3.y - verticle2.y, verticle3.z - verticle2.z);
+	Vector vec43(verticle3.x - verticle4.x, verticle3.y - verticle4.y, verticle3.z - verticle4.z);
+	float vec12_length = vec12.getVecLength();
+	float vec43_length = vec43.getVecLength();
+	float vec14_length = vec14.getVecLength();
+	float iter12_43 = vec12_length / 0.05; //!向量vec12或vec43方向一共迭代次数
+	float iter14 = vec14_length / 0.05; //!向量vec14方向一共迭代次数
+	float iter23 = 250; //!向量vec23方向一共迭代250次
+	float iter_triang_14 = 20; //!在三角形中沿向量vec14方向一共迭代50次
+
+	int i = 0, j = 0;
+	for (Point it1 = verticle1; i < iter12_43 + 1; ++i)
+	{
+		j = 0;
+		for (Point it2 = it1; j < iter14 + 1; ++j)
+		{
+			pcl::PointXYZ basic_point;  
+
+			basic_point.x = it2.x;
+			basic_point.y = it2.y;  
+			basic_point.z = it2.z;
+			if ( !is_pnt_in_win(rect, wmparams, it2))
+			{
+				cld->points.push_back(basic_point);  
+			}			
+
+			if (it2 == verticle3)
+			{
+				Point it3 = Point(verticle3.x - vec23.x / iter23, verticle3.y - vec23.y / iter23, verticle3.z - vec23.z / iter23);
+				int k = 0, L = 0;
+				for ( ; k < iter23; ++k)
+				{
+					//重新计算三角形中平行于vec14的向量，使其长度合理
+					float vec_len = (iter23 - k - 1) / iter23 * vec14_length;
+					Vector vec(vec14.x / vec14_length * vec_len, vec14.y / vec14_length * vec_len, vec14.z / vec14_length * vec_len);
+
+					L = 0;
+					iter_triang_14 = (iter23 - k - 1) / iter23 * iter14;
+					for (Point it4 = it3; L < iter_triang_14 + 1; ++L)
+					{
+						pcl::PointXYZ basic_point;  
+
+						basic_point.x = it4.x;
+						basic_point.y = it4.y;  
+						basic_point.z = it4.z;
+						if ( !is_pnt_in_win(rect, wmparams, it4))
+						{
+							cld->points.push_back(basic_point);  
+						}
+						it4 = Point(it4.x - vec.x / iter_triang_14, it4.y - vec.y / iter_triang_14, it4.z - vec.z / iter_triang_14);
+					}
+					it3 = Point(it3.x - vec23.x / iter23, it3.y - vec23.y / iter23, it3.z - vec23.z / iter23);
+				}
+				goto COMPLETE_FILL;
+			}
+			it2 = Point(it2.x + vec14.x / iter14, it2.y + vec14.y / iter14, it2.z + vec14.z / iter14);
+		}
+		
+		if (it1 == verticle2)
+		{
+			int k = 0, L = 0;
+			for (Point it3 = it1; k < iter23 + 1; ++k)
+			{
+				//重新计算三角形中平行于vec14的向量，使其长度合理
+				float vec_len = (iter23 - k) / iter23 * vec14_length;
+				Vector vec(vec14.x / vec14_length * vec_len, vec14.y / vec14_length * vec_len, vec14.z / vec14_length * vec_len);
+
+				L = 0;
+				iter_triang_14 = (iter23 - k) / iter23 * iter14;
+				for (Point it4 = it3; L < iter_triang_14 + 1; ++L)
+				{
+					pcl::PointXYZ basic_point;  
+
+					basic_point.x = it4.x;
+					basic_point.y = it4.y;  
+					basic_point.z = it4.z;
+					if ( !is_pnt_in_win(rect, wmparams, it4))
+					{
+						cld->points.push_back(basic_point);  
+					}
+					it4 = Point(it4.x + vec.x / iter_triang_14, it4.y + vec.y / iter_triang_14, it4.z + vec.z / iter_triang_14);
+				}
+				it3 = Point(it3.x + vec23.x / iter23, it3.y + vec23.y / iter23, it3.z + vec23.z / iter23);
+			}
+			goto COMPLETE_FILL;
+		}
+		it1 = (vec12_length > vec43_length ? Point(it1.x + vec43.x / iter12_43, it1.y + vec43.y / iter12_43, it1.z + vec43.z / iter12_43)
+			      : Point(it1.x + vec12.x / iter12_43, it1.y + vec12.y / iter12_43, it1.z + vec12.z / iter12_43));
+	}
+	
+COMPLETE_FILL:
+	cld->width = static_cast<unsigned int>(cld->points.size());  
+	cld->height = 1;
+
+	return true;
+}
+
+
+ /** \brief  链接矩形的4条边，并加入到点云中
+   * \param[in]  rect 矩形
+   * \param[out]  cld 点云
+   */
+static bool connect_rect_edge(const Rect &rect, PointCloud<PointXYZ>::Ptr cld)
+{
+	const Point &verticle1 = rect.m_verticle1;
+	const Point &verticle2 = rect.m_verticle2;
+	const Point &verticle3 = rect.m_verticle3;
+	const Point &verticle4 = rect.m_verticle4;
 
 	//注意rect里面的4个点不一定呈标准矩形，但一定是一个上下两边平行的四边形
 	Vector vec12(verticle2.x - verticle1.x, verticle2.y - verticle1.y, verticle2.z - verticle1.z);
@@ -1652,7 +1829,6 @@ bool determin_plane_from_rect_only_contour(Rect & rect, PointCloud<PointXYZ>::Pt
 	float iter12_43 = 250; //!向量vec12或vec43方向一共迭代250次
 	float iter14 = 250; //!向量vec14方向一共迭代250次
 	float iter23 = 250; //!向量vec23方向一共迭代250次
-	float iter_triang_14 = 20; //!在三角形中沿向量vec14方向一共迭代50次
 
 	int i = 0, j = 0;
 	for (Point it1 = verticle1; i < iter12_43 + 1; ++i)
@@ -1693,15 +1869,6 @@ bool determin_plane_from_rect_only_contour(Rect & rect, PointCloud<PointXYZ>::Pt
 		it1 = Point(it1.x - vec43.x / iter12_43, it1.y - vec43.y / iter12_43, it1.z - vec43.z / iter12_43);
 	}
 
-	//pcl::PointXYZ basic_point1;  
-
-	//basic_point1.x = verticle3.x;
-	//basic_point1.y = verticle3.y;  
-	//basic_point1.z = verticle3.z;
-	//cld->points.push_back(basic_point1);
-
-	//std::cout<<verticle3<<std::endl;
-
 	i = 0;
 	for (Point it1 = verticle4; i < iter14 + 1; ++i)
 	{
@@ -1717,5 +1884,31 @@ bool determin_plane_from_rect_only_contour(Rect & rect, PointCloud<PointXYZ>::Pt
 	cld->width = static_cast<unsigned int>(cld->points.size());  
 	cld->height = 1;
 
+	return true;
+}
+
+ /** \brief  从矩形4个顶点确定一个点云平面，只画出轮廓
+   * \param[in]  rect 输入的Rect，包括矩形的4个顶点
+   * \param[out]  cld 得到的点云PointCloud
+   */
+bool determin_plane_from_rect_only_contour(const Rect & rect, PointCloud<PointXYZ>::Ptr cld)
+{
+	return connect_rect_edge(rect, cld);	
+}
+
+ /** \brief  从矩形4个顶点确定一个点云平面，只画出轮廓
+   * \param[in]  rect 输入的Rect，包括矩形的4个顶点
+   * \param[in]  v_wins_rect 输入的Rect中包含的小窗户矩形
+   * \param[out]  cld 得到的点云PointCloud
+   */
+bool determin_plane_from_rect_only_contour(const Rect & rect, const VecRect &v_wins_rect, PointCloud<PointXYZ>::Ptr cld)
+{
+	connect_rect_edge(rect, cld);
+
+	size_t wins_count = v_wins_rect.size();
+	for (size_t i = 0; i < wins_count; ++i)
+	{
+		connect_rect_edge(v_wins_rect[i], cld);
+	}
 	return true;
 }

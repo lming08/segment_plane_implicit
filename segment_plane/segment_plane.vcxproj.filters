@@ -13,6 +13,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="include\gflags">
+      <UniqueIdentifier>{e4277751-2d7a-425d-9732-b434e8d1bbbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\cluster_extraction.cpp">
@@ -34,6 +37,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\common_operate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\serialize.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wins.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +69,18 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\include\common_operate.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gflags\gflags.h">
+      <Filter>include\gflags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gflags\gflags_completions.h">
+      <Filter>include\gflags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gflags\gflags_declare.h">
+      <Filter>include\gflags</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\wins.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

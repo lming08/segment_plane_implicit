@@ -47,14 +47,15 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;4819</DisableSpecificWarnings>
-      <PreprocessorDefinitions>_BASE_VERTICLE_GROUND;_RAND;_CUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_BASE_VERTICLE_GROUND;_RAND;_CUT;_CLUSTER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
       <AdditionalOptions>-Zm249 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>libboost_system-vc100-mt-gd-1_50.lib;libboost_filesystem-vc100-mt-gd-1_50.lib;libboost_thread-vc100-mt-gd-1_50.lib;libboost_date_time-vc100-mt-gd-1_50.lib;libboost_iostreams-vc100-mt-gd-1_50.lib;pcl_common_debug.lib;pcl_octree_debug.lib;C:\Program Files (x86)\OpenNI\Lib\openNI.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkCommon-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkRendering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkHybrid-gd.lib;pcl_io_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\FLANN\lib\flann_cpp_s-gd.lib;pcl_kdtree_debug.lib;pcl_search_debug.lib;pcl_sample_consensus_debug.lib;pcl_filters_debug.lib;pcl_segmentation_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_visualization_debug.lib;pcl_features_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\Qhull\lib\qhullstatic_d.lib;pcl_surface_debug.lib;pcl_registration_debug.lib;pcl_keypoints_debug.lib;pcl_tracking_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_apps_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkGraphics-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkverdict-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkImaging-gd.lib;C:\Qt\4.8.0\lib\QtGuid4.lib;C:\Qt\4.8.0\lib\QtSqld4.lib;C:\Qt\4.8.0\lib\QtCored4.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkIO-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkFiltering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkDICOMParser-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF_cxx-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkmetaio-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksys-gd.lib;ws2_32.lib;comctl32.lib;wsock32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksqlite-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkpng-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtktiff-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkzlib-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkjpeg-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexpat-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkftgl-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkfreetype-gd.lib;opengl32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexoIIc-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF-gd.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libboost_system-vc100-mt-gd-1_50.lib;libboost_filesystem-vc100-mt-gd-1_50.lib;libboost_thread-vc100-mt-gd-1_50.lib;libboost_date_time-vc100-mt-gd-1_50.lib;libboost_iostreams-vc100-mt-gd-1_50.lib;pcl_common_debug.lib;pcl_octree_debug.lib;C:\Program Files (x86)\OpenNI\Lib\openNI.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkCommon-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkRendering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkHybrid-gd.lib;pcl_io_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\FLANN\lib\flann_cpp_s-gd.lib;pcl_kdtree_debug.lib;pcl_search_debug.lib;pcl_sample_consensus_debug.lib;pcl_filters_debug.lib;pcl_segmentation_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_visualization_debug.lib;pcl_features_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\Qhull\lib\qhullstatic_d.lib;pcl_surface_debug.lib;pcl_registration_debug.lib;pcl_keypoints_debug.lib;pcl_tracking_debug.lib;C:\Program Files (x86)\PCL 1.6.0\lib\pcl_apps_debug.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkGraphics-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkverdict-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkImaging-gd.lib;C:\Qt\4.8.0\lib\QtGuid4.lib;C:\Qt\4.8.0\lib\QtSqld4.lib;C:\Qt\4.8.0\lib\QtCored4.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkIO-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkFiltering-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkDICOMParser-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF_cxx-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkmetaio-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksys-gd.lib;ws2_32.lib;comctl32.lib;wsock32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtksqlite-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkpng-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtktiff-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkzlib-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkjpeg-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexpat-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkftgl-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkfreetype-gd.lib;opengl32.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkexoIIc-gd.lib;C:\Program Files (x86)\PCL 1.6.0\3rdParty\VTK\lib\vtk-5.8\vtkNetCDF-gd.lib;vfw32.lib;gflags.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,17 +80,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\src\process.cpp" />
+    <ClCompile Include="..\src\serialize.cpp" />
     <ClCompile Include="..\src\window_model.cpp" />
+    <ClCompile Include="..\src\wins.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\common.h" />
     <ClInclude Include="..\include\common_operate.h" />
     <ClInclude Include="..\include\gaussfilter.h" />
+    <ClInclude Include="..\include\gflags\gflags.h" />
+    <ClInclude Include="..\include\gflags\gflags_completions.h" />
+    <ClInclude Include="..\include\gflags\gflags_declare.h" />
     <ClInclude Include="..\include\meanshift.h" />
     <ClInclude Include="..\include\other.hpp" />
     <ClInclude Include="..\include\process.h" />
     <ClInclude Include="..\include\typesdef.h" />
     <ClInclude Include="..\include\window_model.h" />
+    <ClInclude Include="..\include\wins.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

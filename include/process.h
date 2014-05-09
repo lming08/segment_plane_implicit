@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "typesdef.h"
+#include "window_model.h"
 
 typedef std::vector<PointCloudPlane>::size_type v_pcp_size_type;
 
@@ -64,16 +65,29 @@ bool pointcloudplane2pointcloud(const PointCloudPlane & in_pcp, PointCloud<Point
    */
 bool traverse_determin_planes_verticles(const PointCloud<PointXYZ>::Ptr pntcld_original, /*const*/ VecPointCloudPlane & v_pntcldpln, VecRect & v_rect);
 
- /** \brief  从矩形3个顶点确定一个点云平面
-   * \param[in]  rect 输入的Rect，包括矩形的3个顶点
+ /** \brief  从矩形4个顶点确定一个点云平面
+   * \param[in]  rect 输入的Rect，包括矩形的4个顶点
    * \param[out]  cld 得到的点云PointCloud
    */
-bool determin_plane_from_rect(Rect & rect, PointCloud<PointXYZ>::Ptr cld);
+bool determin_plane_from_rect(const Rect & rect, PointCloud<PointXYZ>::Ptr cld);
 
  /** \brief  从矩形4个顶点确定一个点云平面，只画出轮廓
    * \param[in]  rect 输入的Rect，包括矩形的4个顶点
    * \param[out]  cld 得到的点云PointCloud
    */
-bool determin_plane_from_rect_only_contour(Rect & rect, PointCloud<PointXYZ>::Ptr cld);
+bool determin_plane_from_rect_only_contour(const Rect & rect, PointCloud<PointXYZ>::Ptr cld);
 
+ /** \brief  从矩形4个顶点确定一个点云平面，只画出轮廓
+   * \param[in]  rect 输入的Rect，包括矩形的4个顶点
+   * \param[in]  v_wins_rect 输入的Rect中包含的小窗户矩形
+   * \param[out]  cld 得到的点云PointCloud
+   */
+bool determin_plane_from_rect_only_contour(const Rect & rect, const VecRect &v_wins_rect, PointCloud<PointXYZ>::Ptr cld);
+
+ /** \brief  从矩形4个顶点以及窗户模型参数确定一个点云平面
+   * \param[in]  rect 输入的Rect，包括矩形的4个顶点
+   * \param[in]  wmparams 输入的窗户模型参数，包括相邻窗户间的距离、边缘窗户与边缘间的距离
+   * \param[out]  cld 得到的点云PointCloud
+   */
+bool determin_plane_from_rect_winmodel(const Rect & rect, const WindowModelParams &wmparams, PointCloud<PointXYZ>::Ptr cld);
 #endif

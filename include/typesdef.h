@@ -21,14 +21,21 @@ const int MAX_ITERS = 100;//100;//220;  //!Æ½Ãæ·Ö¸îÊ±Ëæ»ú²ÉÑùÒ»ÖÂĞÔËã·¨ÖĞµÄµü´ú´
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const float WIN_PNT2LINE_DIST_THRSHLD = 0.10f;  //!WindowModelÀàÖĞ£¬µãµ½Ö±Ïß¾àÀëµÄãĞÖµ£¬Èç¹ûĞ¡ÓÚ¸ÃãĞÖµ£¬¾ÍÈÏÎªµãÔÚÖ±ÏßÉÏ
-const float WIN_PNT2PNT_DIST_MIN = 0.20f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤µÄ×îĞ¡Öµ
-const float WIN_PNT2PNT_DIST_MAX = 2.80f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤µÄ×î´óÖµ
+
+const float WIN_PNT2PNT_WIDTH_DIST_MIN = 0.50f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤¿íµÄ×îĞ¡Öµ
+const float WIN_PNT2PNT_WIDTH_DIST_MAX = 2.0f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤¿íµÄ×î´óÖµ
+const float WIN_PNT2PNT_HEIGHT_DIST_MIN = 0.90f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤¸ßµÄ×îĞ¡Öµ
+const float WIN_PNT2PNT_HEIGHT_DIST_MAX = 2.20f;  //!WindowModelÀàÖĞ£¬µãµ½µã¼äµÄ¾àÀëµÄãĞÖµ£¬´°»§±ß³¤¸ßµÄ×î´óÖµ
+
 const float WIN_PNT2LR_BILATERAL_DIST_MIN = 0.3f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½Ãæ×óÓÒ(left right)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
-const float WIN_PNT2LR_BILATERAL_DIST_MAX = 2.8f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½Ãæ×óÓÒ(left right)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
+const float WIN_PNT2LR_BILATERAL_DIST_MAX = 2.4f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½Ãæ×óÓÒ(left right)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
 const float WIN_PNT2UD_BILATERAL_DIST_MIN = 0.3f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½ÃæÉÏÏÂ(up down)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
-const float WIN_PNT2UD_BILATERAL_DIST_MAX = 4.8f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½ÃæÉÏÏÂ(up down)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
+const float WIN_PNT2UD_BILATERAL_DIST_MAX = 1.8f;  //!WindowModelÀàÖĞ£¬µãµ½Ç½ÃæÉÏÏÂ(up down)±ßÔµ¾àÀëµÄ×îĞ¡Öµ
+
 const float WIN_JUDGE_PNT_IS_BOUND_ANGLE_THRSHLD = (M_PI / 2);  //!WindowModelÀàÖĞ£¬ÅĞ¶ÏµãÊÇ·ñÊÇ±ß½çµãÊ±ËùĞèÒªµÄ½Ç¶ÈãĞÖµ
 const int WIN_RELAXATION_FACTOR = 5;  //!WindowModelÀàÖĞ£¬ËÉ³ÚÒò×Ó£¬Ö÷ÒªÓÃÓÚÇ½Ãæ±ßÔµÓĞÊı¸öÏà½üµÄ±ß½çµã£¬ÉèÖÃ¸ÃÊıÎªËÉ³ÚÒò×Ó
+
+const float WIN_BNDARY_KNN_RADIUS = 0.8f;  //!WindowModelÀàºÍWinsÀàÖĞÅĞ±ğµãÊÇ·ñÊÇ±ß½çµãÊ±ËùĞèÒªµÄKNN°ë¾¶
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -200,6 +207,7 @@ typedef struct _Rect
 
 typedef std::vector<PointCloudPlane> VecPointCloudPlane;
 typedef std::vector<Rect> VecRect;
+typedef std::vector<VecRect> VecVecRect;
 
 typedef Eigen::aligned_allocator<PointCloud<PointXYZ>> AlignedAllocator_PointCloud;
 typedef std::vector<PointCloud<PointXYZ>, AlignedAllocator_PointCloud> VecPointCloud;

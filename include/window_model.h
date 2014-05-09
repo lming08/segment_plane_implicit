@@ -1,4 +1,5 @@
 ﻿/*
+ * 首先求出墙面的所有窗户的边界(包括墙面边缘)，然后扫描确定窗户的宽高等属性
  *	lming_08@hotmail.com
  */
 #ifndef _WINDOW_MODEL_H_
@@ -12,9 +13,12 @@
 class WindowModel
 {
 public:
-	static const float Z_DELTA;
+	static const float Z_DELTA;  //!沿着(0, 0, ±1)方向移动的步长
+    static const float XY_DELTA;  //!沿着平行于XOY平面方向移动的步长
+	//static const float NEAREST_ZERO;  //!点与点间的距离在(0, NEAREST_ZERO)内就认为重合
 	static const float SIGMA;
 	typedef PointCloud<PointXYZ>::Ptr PointCloudPtr;
+	typedef pcl::PointCloud<pcl::Boundary> PointCloudBoundary;
 
 	WindowModel() : m_knn_radius(0.0f){}	
 
@@ -35,13 +39,13 @@ public:
 	}
 
     /*检查所有点是否是边界点*/
-    void checkAllPointsIsBoundary();
+	void checkAllPointsIsBoundary(PointCloudBoundary &boundaries);
 
 	/*计算窗户宽度和距离边缘的距离*/
-	void computeWinWidthAndMarginDist(float &width, float &margin_lr_dist, float &horizon_wins_dist);
+	void computeWinWidthAndMarginDist(const PointCloudBoundary &boundaries, float &width, float &margin_lr_dist, float &horizon_wins_dist);
 
 	/*计算窗户高度和距离边缘的距离*/
-	void computeWinHeightAndMarginDist(float &height, float &margin_ud_dist, float &vertical_wins_dist);
+	void computeWinHeightAndMarginDist(const PointCloudBoundary &boundaries, float &height, float &margin_ud_dist, float &vertical_wins_dist);
 
 private:
 	/*从点云中获取Z值最大和最小的索引*/
@@ -66,7 +70,6 @@ private:
 	PointCloudPtr m_input;
 	PlaneCoeff m_plane;
 	float m_knn_radius;
-    pcl::PointCloud<pcl::Boundary> m_boundaries;
 };
 
 typedef struct _WindowModelParams
@@ -81,7 +84,6 @@ typedef struct _WindowModelParams
 
     _WindowModelParams() : width(0.0f), margin_lr_dist(0.0f), horizon_wins_dist(0.0f), 
 		height(0.0f), margin_ud_dist(0.0f), vertical_wins_dist(0.0f){  }
-
 }WindowModelParams;
 
-#endif
+#endif  //  _WINDOW_MODEL_H_

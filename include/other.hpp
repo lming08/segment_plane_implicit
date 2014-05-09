@@ -30,4 +30,16 @@ inline bool get_output_dir(const string &filename, string &dirname)
 	return true;
 }
 
+ /** \brief 由可执行文件路径和工作目录名得到工作目录路径名
+   * \param[in] execfilename 可执行文件路径
+   * \param[in] workdirname 工作目录名
+   * \param[out] workdirname 工作目录路径
+   */
+inline bool get_output_dir(const string &execfilename, const string &workdirname, string &dirpath)
+{
+	size_t exec_found = execfilename.find_last_of("/\\");
+	dirpath = execfilename.substr(0, exec_found) + "/" + workdirname;
+
+	return true;
+}
 #endif  //_OTHRE_HPP_
