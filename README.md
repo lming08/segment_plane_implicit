@@ -3,10 +3,10 @@
 提取出每个建筑物平面中的若干个窗户，然后结合墙面重构出整个墙面的原貌。
 本项目是基于PCL开源三维点云处理库编程。PCL点云库官方网站：http://www.pointclouds.org/
 
-在控制台下执行：
-    segment_plane.exe
-    please execute command line：segment_plane.exe  -particular=false -win=false -workdir=pcd_0 -pcdfile=0.pcd   -xmlfile=archive_vecpntcldpln.xml
-    
+在控制台下执行:
+        segment_plane.exe
+        please execute command line：segment_plane.exe  -particular=false -win=false -workdir=pcd_0
+        -pcdfile=0.pcd   -xmlfile=archive_vecpntcldpln.xml
     或
     segment_plane.exe -help
     -ar (either archive xml file or mot) type: bool default: false
