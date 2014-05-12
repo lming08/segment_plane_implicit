@@ -4,19 +4,19 @@
 本项目是基于PCL开源三维点云处理库编程。PCL点云库官方网站：http://www.pointclouds.org/
 
 在控制台下执行：
-  segment_plane.exe
-  please execute command line：segment_plane.exe  -particular=false -win=false -workdir=pcd_0 -pcdfile=0.pcd -xmlfile=archive_vecpntcldpln.xml
-
-或
-  segment_plane.exe -help
-   -ar (either archive xml file or mot) type: bool default: false
-   -execfile (executable file path name) type: string default: ""
-   -particular (either generate xml file particularly or mot) type: bool
-     default: false
-   -pcdfile (pcd file name) type: string default: ""
-   -win (either windows model or mot) type: bool default: false
-   -workdir (work directory name) type: string default: ""
-   -xmlfile (xml file name) type: string default: ""
+    segment_plane.exe
+    please execute command line：segment_plane.exe  -particular=false -win=false -workdir=pcd_0 -pcdfile=0.pcd   -xmlfile=archive_vecpntcldpln.xml
+    
+    或
+    segment_plane.exe -help
+    -ar (either archive xml file or mot) type: bool default: false
+    -execfile (executable file path name) type: string default: ""
+    -particular (either generate xml file particularly or mot) type: bool
+      default: false
+    -pcdfile (pcd file name) type: string default: ""
+    -win (either windows model or mot) type: bool default: false
+    -workdir (work directory name) type: string default: ""
+    -xmlfile (xml file name) type: string default: ""
 便可以获取使用方法。
 
 通过定义_SCAN或_CLUSTER宏来决定是采用扫描方法还是聚类方法建立窗户模型
